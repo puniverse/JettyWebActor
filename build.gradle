@@ -1,0 +1,38 @@
+apply plugin: 'java'
+
+sourceCompatibility = '1.8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+ext.quasarVersion = '0.6.0-SNAPSHOT'
+ext.comsatVersion = '0.2.0-SNAPSHOT'
+
+if (!hasProperty('mainClass')) {
+    ext.mainClass = 'co.paralleluniverse.example.JettyWebActor'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+
+configurations {
+    quasar
+}
+dependencies {
+    compile 'org.eclipse.jetty.websocket:javax-websocket-server-impl:9.2.0.M1'
+    compile "co.paralleluniverse:quasar-core:$quasarVersion"
+    compile "co.paralleluniverse:comsat-actors-servlet:$comsatVersion"
+    compile "co.paralleluniverse:comsat-jax-rs-client:$comsatVersion"
+    quasar  "co.paralleluniverse:quasar-core:$quasarVersion"
+    testCompile group: 'junit', name: 'junit', version: '4.10'
+}
+tasks.withType(JavaExec) {
+    main = mainClass
+    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}" // =v, =d
+    jvmArgs '-server'
+    jvmArgs '-Xmx1024m'
+//    jvmArgs "-ea"
+    classpath = sourceSets.main.runtimeClasspath 
+//    args "server", "hello-world.yml"
+//    systemProperty 'co.paralleluniverse.fibers.verifyInstrumentation', 'true'
+}

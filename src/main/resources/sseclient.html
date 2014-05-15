@@ -1,0 +1,40 @@
+<html>
+    <h1>ParllelUniverse Webactor example</h1>
+    <h3>SSE push</h3>
+    <form onsubmit="return sendMessage();">
+        username: <input type=text id=userName value="username" /><br/>
+        message: <input type=text id=txtMessage value="" />
+        <input type="submit" style="visibility: hidden;" />
+        <p><textarea id="SSEoutput" cols=60 rows=10>Click 'connect' button to connect</textarea></p>
+    </form>
+
+    <script type="text/javascript">
+        var source;
+        var mypath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/"));
+        var wsUrl = "http://" + window.location.host + mypath + "/ssechannel";
+        if (typeof (EventSource) !== "undefined") {
+            source = new EventSource(wsUrl);
+            document.getElementById("SSEoutput").innerHTML = "Connecting to " + wsUrl + "...";
+            source.onmessage = function(e) {SSEprintAndScroll("SSEoutput", "\nResponse: " + e.data);};
+            source.onopen = function() {SSEprintAndScroll("SSEoutput", "\nConnected");};
+            source.onclose = function() {SSEprintAndScroll("SSEoutput", "\nDisconnected\n");};
+        } else
+            alert("SSE not supported on your browser.");
+
+        function SSEprintAndScroll(id, text) {
+            document.getElementById(id).innerHTML += text;
+            document.getElementById(id).scrollTop = document.getElementById(id).scrollHeight;
+        }
+
+        function sendMessage() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/ssepublish', true);
+            xhr.send(
+                    document.getElementById("userName").value+": "+
+                    document.getElementById("txtMessage").value);
+            document.getElementById("txtMessage").value = "";
+            return false;
+        }
+
+    </script>
+</html>
