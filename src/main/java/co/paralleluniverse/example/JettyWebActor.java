@@ -1,16 +1,8 @@
 package co.paralleluniverse.example;
 
-import co.paralleluniverse.actors.ActorRef;
-import co.paralleluniverse.actors.BasicActor;
-import co.paralleluniverse.actors.ExitMessage;
-import co.paralleluniverse.actors.LifecycleMessage;
-import co.paralleluniverse.comsat.webactors.HttpRequest;
+import co.paralleluniverse.actors.*;
+import co.paralleluniverse.comsat.webactors.*;
 import static co.paralleluniverse.comsat.webactors.HttpResponse.*;
-import co.paralleluniverse.comsat.webactors.HttpStreamOpened;
-import co.paralleluniverse.comsat.webactors.SSE;
-import co.paralleluniverse.comsat.webactors.WebActor;
-import co.paralleluniverse.comsat.webactors.WebDataMessage;
-import co.paralleluniverse.comsat.webactors.WebStreamOpened;
 import co.paralleluniverse.comsat.webactors.servlet.WebActorInitializer;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.channels.Channels;
